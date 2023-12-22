@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Polisens Händelser</title>
+</head>
+<body>
+    <h1>Polisens Händelser</h1>
+    {% if events %}
+        <ul>
+            {% for event in events %}
+                <li>{{ event.summary }}</li> <!-- Eller hur nu varje event är strukturerat -->
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Inga händelser tillgängliga.</p>
+    {% endif %}
+</body>
+</html>

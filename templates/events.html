@@ -1,0 +1,38 @@
+<!-- events.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Polisens Händelser</title>
+</head>
+<body>
+    <h1>Polisens Händelser</h1>
+    <!-- Lägg till ditt formulär för filtrering här -->
+    <form id="filter-form">
+        <input type="text" id="type-filter" placeholder="Typ av händelse">
+        <input type="text" id="date-filter" placeholder="Datum (YYYY-MM-DD)">
+        <button type="submit">Filtrera</button>
+    </form>
+    <ul id="events-list">
+        <!-- Händelselista kommer att laddas här -->
+    </ul>
+
+    <script>
+    document.getElementById('filter-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var type = document.getElementById('type-filter').value;
+        var date = document.getElementById('date-filter').value;
+        fetch(`/fetch_polisen_data?type=${encodeURIComponent(type)}&date=${encodeURIComponent(date)}`)
+            .then(response => response.json())
+            .then(events => {
+                var html = '';
+                events.forEach(event => {
+                    html += `<li>${event.name} - ${event.summary}</li>`;
+                });
+                document.getElementById('events-list').innerHTML = html;
+            });
+    });
+    </script>
+</body>
+</html>
+
