@@ -17,24 +17,22 @@ MQTT_TOPIC = 'police/events'  # Vår topic
 # Polisens API URL
 POLISEN_API_URL = "https://polisen.se/api/events"
 
-# Initialize MQTT client
-mqtt_client = mqtt.Client(MQTT_CLIENT_ID, transport="websockets")  # Note the transport argument
+#  MQTT client
+mqtt_client = mqtt.Client(MQTT_CLIENT_ID, transport="websockets")  
 
-# Define the event callbacks
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code " + str(rc))
 
 def on_message(client, userdata, msg):
     print(msg.topic + " " + str(msg.payload))
 
-# Assign the callbacks
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 
-# Connect to HiveMQ broker
+# Connecta till HiveMQ broker
 mqtt_client.connect(MQTT_BROKER_URL, MQTT_PORT, 60)
 
-# Start a background thread handling the network connection
+# Kör threading och handling
 mqtt_client.loop_start()
 
 def fetch_polisen_data():
@@ -46,12 +44,12 @@ def fetch_polisen_data():
         # Publish to MQTT
         for event in events:
             mqtt_client.publish(MQTT_TOPIC, str(event))
-            time.sleep(1)  # Don't spam the MQTT broker, adjust as necessary
+            time.sleep(1)  
 
-        # Wait for some time before fetching new data
-        time.sleep(600)  # Fetch new data every 10 minutes, adjust as needed
+        
+        time.sleep(600)  
 
-# Start fetching Polisen data in a separate thread
+# Hämta Polisens data i en separat thread
 threading.Thread(target=fetch_polisen_data, daemon=True).start()
 
 @app.route("/")
